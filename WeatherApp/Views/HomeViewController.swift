@@ -9,7 +9,7 @@
 import UIKit
 import MapKit
 
-class HomeViewController: UIViewController, MKMapViewDelegate, UITableViewDelegate, UITableViewDataSource {
+class HomeViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UIGestureRecognizerDelegate {
 
     @IBOutlet weak var mapView: MKMapView!
     @IBOutlet weak var citiesTableView: UITableView!
@@ -46,11 +46,6 @@ class HomeViewController: UIViewController, MKMapViewDelegate, UITableViewDelega
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-//        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-//        
-//        let controller = storyboard.instantiateViewController(withIdentifier: "CityViewController") as! CityViewController
-//        
-//        self.navigationController?.pushViewController(controller, animated: true)
         selectedCity = cities[indexPath.row]
         performSegue(withIdentifier: "showCity", sender: self)
         tableView.deselectRow(at: indexPath, animated: true)
@@ -66,21 +61,15 @@ class HomeViewController: UIViewController, MKMapViewDelegate, UITableViewDelega
         let lpgr = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress(gestureReconizer:)))
         lpgr.minimumPressDuration = 0.5
         lpgr.delaysTouchesBegan = true
-        lpgr.delegate = self as? UIGestureRecognizerDelegate
+        lpgr.delegate = self
         self.mapView.addGestureRecognizer(lpgr)
-//        let mapManager = MapManager(mapView: self.mapView)
-        
-//        mapManager.mapView = self.mapView
-//        self.mapView.delegate = mapManager
-//        mapManager.setGesture()
     }
-//
+
     @objc func handleLongPress(gestureReconizer: UILongPressGestureRecognizer) {
         if gestureReconizer.state != UIGestureRecognizerState.ended {
             let touchLocation = gestureReconizer.location(in: mapView)
             let locationCoordinate = mapView.convert(touchLocation, toCoordinateFrom: mapView)
-            print("Tapped at lat: \(locationCoordinate.latitude) long: \(locationCoordinate.longitude)")
-
+            
             let geocoder = CLGeocoder()
             let location = CLLocation(latitude: locationCoordinate.latitude, longitude: locationCoordinate.longitude)
             geocoder.reverseGeocodeLocation(location) {
@@ -89,16 +78,15 @@ class HomeViewController: UIViewController, MKMapViewDelegate, UITableViewDelega
 
                 if let placemarks = placemarks, placemarks.count > 0 {
                     let placemark = placemarks[0]
-//                    print(placemark.locality!)
-//                    let address = "\(placemark.thoroughfare ?? ""), \(placemark.locality ?? ""), \(placemark.subLocality ?? ""), \(placemark.administrativeArea ?? ""), \(placemark.postalCode ?? ""), \(placemark.country ?? "")"
-//                    print("\(address)")
 
                     guard let cityName = placemark.locality else {
-                        print("no city at tapped point")
+                        let alert = UIAlertController(title: "Alert", message: "No city was not found on tapped point", preferredStyle: UIAlertControllerStyle.alert)
+                        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { action in
+                        }))
+                        self.present(alert, animated: true, completion: nil)
                         return
                     }
                     let city = City(name: cityName, latitude: locationCoordinate.latitude, longitude: locationCoordinate.longitude)
-                    print("\(city.name)")
                     self.cities.append(city)
                     self.citiesTableView.reloadData()
                 }
@@ -115,16 +103,4 @@ class HomeViewController: UIViewController, MKMapViewDelegate, UITableViewDelega
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
 }

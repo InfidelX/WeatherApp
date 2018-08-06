@@ -11,29 +11,25 @@ import MapKit
 
 class MapManager: NSObject, MKMapViewDelegate {
     
-    var mapView : MKMapView? = nil
+    weak var homeViewController: HomeViewController!
     
-    init(mapView: MKMapView) {
-        self.mapView = mapView
-        super.init()
-        self.mapView?.delegate = self
-        self.setGesture()
+    init(viewController: HomeViewController) {
+        self.homeViewController = viewController
     }
     
     public func setGesture () -> Void {
-        let lpgr = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress(gestureReconizer:)))
+        let lpgr = UILongPressGestureRecognizer(target: self, action: #selector(self.homeViewController.handleLongPress(gestureReconizer:)) )
         lpgr.minimumPressDuration = 0.5
         lpgr.delaysTouchesBegan = true
-        lpgr.delegate = self as? UIGestureRecognizerDelegate
-        print(self.mapView!)
-        self.mapView!.addGestureRecognizer(lpgr)
+        lpgr.delegate = self.homeViewController
+        self.homeViewController.mapView!.addGestureRecognizer(lpgr)
     }
     
-    @objc public func handleLongPress(gestureReconizer: UILongPressGestureRecognizer) {
+    @objc private func handleLongPress(gestureReconizer: UILongPressGestureRecognizer) {
         
         if gestureReconizer.state != UIGestureRecognizerState.ended {
-            let touchLocation = gestureReconizer.location(in: mapView)
-            let locationCoordinate = self.mapView!.convert(touchLocation, toCoordinateFrom: mapView)
+            let touchLocation = gestureReconizer.location(in: self.homeViewController.mapView!)
+            let locationCoordinate = self.homeViewController.mapView!.convert(touchLocation, toCoordinateFrom: self.homeViewController.mapView!)
             print("Tapped at lat: \(locationCoordinate.latitude) long: \(locationCoordinate.longitude)")
             
             let geocoder = CLGeocoder()
