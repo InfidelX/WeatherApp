@@ -23,7 +23,7 @@ struct WeatherInfo {
     
     struct Wind
     {
-        let deg: NSNumber
+//        let deg: NSNumber
         let speed: NSNumber
     }
     struct Clouds {

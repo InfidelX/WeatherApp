@@ -13,18 +13,43 @@ class CityViewController: UIViewController {
     let networkManager = NetworkManager()
     let weatherWorker = ModelsWorker()
     var city: City!
-    var weatherInfo: WeatherInfo?
+    
+    @IBOutlet weak var cityNameLbl: UILabel!
+    @IBOutlet weak var tempValue: UILabel!
+    @IBOutlet weak var humidityValue: UILabel!
+    @IBOutlet weak var rainChance: UILabel!
+    @IBOutlet weak var windValue: UILabel!
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
-        print("city: \(city.name) with lat:\(city.latitude) long:\(city.longitude)")
-        let url = String(format:"\(networkManager.url)&lat=\(city.latitude)&lon=\(city.longitude)&appid=\(networkManager.APIKey)&units=metric")
-        print("url: \(url)")
-        networkManager.loadDataFor(urlString: url, withCompletion: {(response) -> () in
-            self.weatherInfo = self.weatherWorker.createWeatherInfo(weather: response!)
+        cityNameLbl.text = city.name
+        fetchWeatherData()
+    }
+    
+    func fetchWeatherData() -> Void
+    {
+        let requestUrl = String(format:"\(networkManager.url)&lat=\(city.latitude)&lon=\(city.longitude)&appid=\(networkManager.APIKey)&units=metric")
+        
+        networkManager.loadDataFor(urlString: requestUrl, withCompletion: {(response) -> () in
+            guard let weather = self.weatherWorker.createWeatherInfo(weather: response!) else {
+                let alert = UIAlertController(title: "Alert", message: "No data could be retrieved for this location", preferredStyle: UIAlertControllerStyle.alert)
+                alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { action in
+                }))
+                self.present(alert, animated: true, completion: nil)
+                return
+            }
+            self.populateFields(with: weather)
         })
+    }
+    
+    func populateFields(with info: WeatherInfo) -> Void
+    {
+        tempValue.text = Presenter.presentTemp(value: info.main!.temp)
+        humidityValue.text = Presenter.presentHumidity(value: info.main!.humidity)
+        rainChance.text = Presenter.presentRainChance(value: info.clouds!.all)
+        windValue.text = Presenter.presentWindSpeed(value: info.wind!.speed)
+        
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -35,16 +60,4 @@ class CityViewController: UIViewController {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
 }
