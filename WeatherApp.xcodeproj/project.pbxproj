@@ -7,10 +7,17 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		432E8BCD2119BCF5001ACCD9 /* PersistanceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 432E8BCC2119BCF5001ACCD9 /* PersistanceTests.swift */; };
+		432E8BCF2119C344001ACCD9 /* PresentationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 432E8BCE2119C344001ACCD9 /* PresentationTests.swift */; };
+		432E8BD12119C408001ACCD9 /* TestWeatherInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 432E8BD02119C408001ACCD9 /* TestWeatherInfo.swift */; };
+		432E8BD32119C883001ACCD9 /* ModelsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 432E8BD22119C883001ACCD9 /* ModelsTests.swift */; };
 		436014442119213200EE8CF7 /* Presenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 436014432119213200EE8CF7 /* Presenter.swift */; };
 		436014452119213200EE8CF7 /* Presenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 436014432119213200EE8CF7 /* Presenter.swift */; };
 		43C439EE21198BC3005A0AB6 /* Places.plist in Resources */ = {isa = PBXBuildFile; fileRef = 43C439ED21198BC3005A0AB6 /* Places.plist */; };
 		43C439EF21198BC3005A0AB6 /* Places.plist in Resources */ = {isa = PBXBuildFile; fileRef = 43C439ED21198BC3005A0AB6 /* Places.plist */; };
+		43D1BB402119AE0E00D52DE1 /* StorageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43FEF9A32118CFA500420F42 /* StorageManager.swift */; };
+		43D1BB422119AEAA00D52DE1 /* PlacesTest.plist in Resources */ = {isa = PBXBuildFile; fileRef = 43D1BB412119AEAA00D52DE1 /* PlacesTest.plist */; };
+		43D1BB472119B6D200D52DE1 /* TestCities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D1BB462119B6D200D52DE1 /* TestCities.swift */; };
 		43FEF979211881D000420F42 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43FEF978211881D000420F42 /* AppDelegate.swift */; };
 		43FEF97E211881D000420F42 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 43FEF97C211881D000420F42 /* Main.storyboard */; };
 		43FEF980211881D300420F42 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 43FEF97F211881D300420F42 /* Assets.xcassets */; };
@@ -43,8 +50,14 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		432E8BCC2119BCF5001ACCD9 /* PersistanceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistanceTests.swift; sourceTree = "<group>"; };
+		432E8BCE2119C344001ACCD9 /* PresentationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresentationTests.swift; sourceTree = "<group>"; };
+		432E8BD02119C408001ACCD9 /* TestWeatherInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestWeatherInfo.swift; sourceTree = "<group>"; };
+		432E8BD22119C883001ACCD9 /* ModelsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelsTests.swift; sourceTree = "<group>"; };
 		436014432119213200EE8CF7 /* Presenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Presenter.swift; sourceTree = "<group>"; };
 		43C439ED21198BC3005A0AB6 /* Places.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Places.plist; sourceTree = "<group>"; };
+		43D1BB412119AEAA00D52DE1 /* PlacesTest.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = PlacesTest.plist; sourceTree = "<group>"; };
+		43D1BB462119B6D200D52DE1 /* TestCities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestCities.swift; sourceTree = "<group>"; };
 		43FEF975211881D000420F42 /* WeatherApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WeatherApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		43FEF978211881D000420F42 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		43FEF97D211881D000420F42 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -91,6 +104,15 @@
 			path = PresentationLogic;
 			sourceTree = "<group>";
 		};
+		43D1BB432119B41A00D52DE1 /* TestModels */ = {
+			isa = PBXGroup;
+			children = (
+				43D1BB462119B6D200D52DE1 /* TestCities.swift */,
+				432E8BD02119C408001ACCD9 /* TestWeatherInfo.swift */,
+			);
+			path = TestModels;
+			sourceTree = "<group>";
+		};
 		43FEF96C211881D000420F42 = {
 			isa = PBXGroup;
 			children = (
@@ -128,8 +150,13 @@
 		43FEF98C211881D300420F42 /* WeatherAppTests */ = {
 			isa = PBXGroup;
 			children = (
+				43D1BB432119B41A00D52DE1 /* TestModels */,
 				43FEF98D211881D300420F42 /* WeatherAppTests.swift */,
+				43D1BB412119AEAA00D52DE1 /* PlacesTest.plist */,
 				43FEF98F211881D300420F42 /* Info.plist */,
+				432E8BCC2119BCF5001ACCD9 /* PersistanceTests.swift */,
+				432E8BCE2119C344001ACCD9 /* PresentationTests.swift */,
+				432E8BD22119C883001ACCD9 /* ModelsTests.swift */,
 			);
 			path = WeatherAppTests;
 			sourceTree = "<group>";
@@ -285,6 +312,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				43D1BB422119AEAA00D52DE1 /* PlacesTest.plist in Resources */,
 				43C439EF21198BC3005A0AB6 /* Places.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -313,11 +341,17 @@
 			buildActionMask = 2147483647;
 			files = (
 				43FEF98E211881D300420F42 /* WeatherAppTests.swift in Sources */,
+				432E8BCF2119C344001ACCD9 /* PresentationTests.swift in Sources */,
+				432E8BCD2119BCF5001ACCD9 /* PersistanceTests.swift in Sources */,
 				43FEF99A21188EF100420F42 /* HomeViewController.swift in Sources */,
+				432E8BD12119C408001ACCD9 /* TestWeatherInfo.swift in Sources */,
 				43FEF9B02118E59A00420F42 /* NetworkManager.swift in Sources */,
 				43FEF9A92118DA3F00420F42 /* City.swift in Sources */,
+				432E8BD32119C883001ACCD9 /* ModelsTests.swift in Sources */,
 				43FEF9B62118F4BD00420F42 /* ModelsWorker.swift in Sources */,
 				436014452119213200EE8CF7 /* Presenter.swift in Sources */,
+				43D1BB472119B6D200D52DE1 /* TestCities.swift in Sources */,
+				43D1BB402119AE0E00D52DE1 /* StorageManager.swift in Sources */,
 				43FEF9B32118F2DA00420F42 /* WeatherInfo.swift in Sources */,
 				43FEF9AC2118E03F00420F42 /* CityViewController.swift in Sources */,
 			);

@@ -11,6 +11,6 @@ import CoreLocation
 
 struct City {
     let name: String
-    let latitude: CLLocationDegrees
-    let longitude: CLLocationDegrees
+    let latitude: String
+    let longitude: String
 }

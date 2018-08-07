@@ -32,6 +32,7 @@ class CityViewController: UIViewController {
         let requestUrl = String(format:"\(networkManager.url)&lat=\(city.latitude)&lon=\(city.longitude)&appid=\(networkManager.APIKey)&units=metric")
         
         networkManager.loadDataFor(urlString: requestUrl, withCompletion: {(response) -> () in
+            print(response!)
             guard let weather = self.weatherWorker.createWeatherInfo(weather: response!) else {
                 let alert = UIAlertController(title: "Error", message: "No data could be retrieved for this location", preferredStyle: UIAlertControllerStyle.alert)
                 alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { action in

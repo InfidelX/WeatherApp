@@ -26,18 +26,17 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
         loadCitiesFromPlist()
     }
     
-    func loadCitiesFromPlist () -> Void {
-        
+    func loadCitiesFromPlist () {
         places = storageManager.readFromPlist(namePlist: StorageManager.StorageKeys.plist.rawValue)
         for city in places {
             let name = (city as AnyObject).value(forKey: StorageManager.StorageKeys.name.rawValue)! as! String
-            let latDouble = (city as AnyObject).value(forKey: StorageManager.StorageKeys.lat.rawValue)!
-            let lonDouble = (city as AnyObject).value(forKey: StorageManager.StorageKeys.lon.rawValue)!
-            let lat = CLLocationDegrees.init((latDouble as AnyObject).doubleValue)
-            let lon = CLLocationDegrees.init((lonDouble as AnyObject).doubleValue)
-            let savedCity = City(name: name, latitude: lat, longitude: lon)
+            let latitude = (city as AnyObject).value(forKey: StorageManager.StorageKeys.lat.rawValue)! as! String
+            let longitude = (city as AnyObject).value(forKey: StorageManager.StorageKeys.lon.rawValue)! as! String
+            let savedCity = City(name: name, latitude: latitude, longitude: longitude)
             cities.append(savedCity)
             citiesTableView.reloadData()
+
+            self.anotation(for: savedCity, add: true)
         }
     }
     
@@ -58,9 +57,17 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
     
      func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
+            
+            anotation(for: cities[indexPath.row], add: false)
+            
             cities.remove(at: indexPath.row)
             self.places.removeObject(at: indexPath.row)
             self.storageManager.writeToPlist(namePlist: StorageManager.StorageKeys.plist.rawValue, array: self.places)
+            
+            for city in cities{
+                anotation(for: city, add: true)
+            }
+            
             tableView.deleteRows(at: [indexPath], with: .fade)
         }
     }
@@ -77,7 +84,7 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
         cityViewController.city = selectedCity
     }
     
-    func setupMapView(){
+    func setupMapView() {
         let lpgr = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress(gestureReconizer:)))
         lpgr.minimumPressDuration = 0.5
         lpgr.delaysTouchesBegan = true
@@ -91,7 +98,8 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
             let locationCoordinate = mapView.convert(touchLocation, toCoordinateFrom: mapView)
             
             let geocoder = CLGeocoder()
-            let location = CLLocation(latitude: locationCoordinate.latitude, longitude: locationCoordinate.longitude)
+            let location = CLLocation(latitude: locationCoordinate.latitude,
+                                      longitude: locationCoordinate.longitude)
             geocoder.reverseGeocodeLocation(location) {
 
                 (placemarks, error) -> Void in
@@ -100,15 +108,25 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
                     let placemark = placemarks[0]
 
                     guard let cityName = placemark.locality else {
-                        let alert = UIAlertController(title: "Alert", message: "No city was not found on tapped point", preferredStyle: UIAlertControllerStyle.alert)
-                        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { action in
+                        let alert = UIAlertController(title: "Alert",
+                                                      message: "No city was not found on tapped point",
+                                                      preferredStyle: UIAlertControllerStyle.alert)
+                        alert.addAction(UIAlertAction(title: "OK",
+                                                      style: .default,
+                                                      handler: { action in
                         }))
                         self.present(alert, animated: true, completion: nil)
                         return
                     }
-                    let city = City(name: cityName, latitude: locationCoordinate.latitude, longitude: locationCoordinate.longitude)
+
+                    let city = City(name: cityName,
+                                latitude: "\(locationCoordinate.latitude)",
+                                longitude: "\(locationCoordinate.longitude)")
+                    
                     self.cities.append(city)
                     self.citiesTableView.reloadData()
+                    
+                    self.anotation(for: city, add: true)
                     
                     let cityDict = [StorageManager.StorageKeys.name.rawValue:cityName,
                                     StorageManager.StorageKeys.lat.rawValue:"\(locationCoordinate.latitude)",
@@ -126,6 +144,29 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
         }
     }
 
+    func anotation(for city: City, add: Bool)
+    {
+        let lat = CLLocationDegrees.init(city.latitude)
+        let lon = CLLocationDegrees.init(city.longitude)
+        
+        let annotation = MKPointAnnotation()
+        annotation.coordinate = CLLocationCoordinate2D(latitude: lat!, longitude: lon!)
+        if add {
+            self.mapView.addAnnotation(annotation)
+        }
+        else
+        {
+            /*
+             the below commented out code, was not removing the annotation for the deleted city
+             that is why i tried deleting all the annotations which worked and adding new ones
+             for the cities remaining in the list
+             */
+            //self.mapView.removeAnnotation(annotation)
+            
+            self.mapView.removeAnnotations(mapView.annotations)
+        }
+    }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
