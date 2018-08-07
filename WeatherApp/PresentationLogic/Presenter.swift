@@ -25,7 +25,10 @@ class Presenter {
     }
     
     public static func presentWindSpeed(value: NSNumber) -> String {
-        let result = "\(value)km/h"
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .decimal
+        formatter.maximumFractionDigits = 2
+        let result = formatter.string(from: value as NSNumber)! + " km/h"
         return result
     }
 }

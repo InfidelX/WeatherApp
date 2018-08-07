@@ -14,13 +14,31 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
     @IBOutlet weak var mapView: MKMapView!
     @IBOutlet weak var citiesTableView: UITableView!
     
+    let storageManager = StorageManager()
     var cities = [City]()
     var selectedCity: City?
+    var places: NSMutableArray = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationController?.isNavigationBarHidden = true
         setupMapView()
+        loadCitiesFromPlist()
+    }
+    
+    func loadCitiesFromPlist () -> Void {
+        
+        places = storageManager.readFromPlist(namePlist: StorageManager.StorageKeys.plist.rawValue)
+        for city in places {
+            let name = (city as AnyObject).value(forKey: StorageManager.StorageKeys.name.rawValue)! as! String
+            let latDouble = (city as AnyObject).value(forKey: StorageManager.StorageKeys.lat.rawValue)!
+            let lonDouble = (city as AnyObject).value(forKey: StorageManager.StorageKeys.lon.rawValue)!
+            let lat = CLLocationDegrees.init((latDouble as AnyObject).doubleValue)
+            let lon = CLLocationDegrees.init((lonDouble as AnyObject).doubleValue)
+            let savedCity = City(name: name, latitude: lat, longitude: lon)
+            cities.append(savedCity)
+            citiesTableView.reloadData()
+        }
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -41,6 +59,8 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
      func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             cities.remove(at: indexPath.row)
+            self.places.removeObject(at: indexPath.row)
+            self.storageManager.writeToPlist(namePlist: StorageManager.StorageKeys.plist.rawValue, array: self.places)
             tableView.deleteRows(at: [indexPath], with: .fade)
         }
     }
@@ -89,6 +109,13 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
                     let city = City(name: cityName, latitude: locationCoordinate.latitude, longitude: locationCoordinate.longitude)
                     self.cities.append(city)
                     self.citiesTableView.reloadData()
+                    
+                    let cityDict = [StorageManager.StorageKeys.name.rawValue:cityName,
+                                    StorageManager.StorageKeys.lat.rawValue:"\(locationCoordinate.latitude)",
+                                    StorageManager.StorageKeys.lon.rawValue:"\(locationCoordinate.longitude)"]
+                    
+                    self.places.add(cityDict)
+                    self.storageManager.writeToPlist(namePlist: StorageManager.StorageKeys.plist.rawValue, array: self.places)
                 }
             }
 

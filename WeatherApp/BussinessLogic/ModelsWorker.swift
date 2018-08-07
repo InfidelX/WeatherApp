@@ -17,7 +17,6 @@ class ModelsWorker: NSObject
         case humidity = "humidity"
         
         case wind = "wind"
-//        case deg = "deg"
         case speed = "speed"
         
         case clouds = "clouds"
@@ -31,7 +30,6 @@ class ModelsWorker: NSObject
         let humidity = main.object(forKey: ServerKeys.humidity.rawValue) as! NSNumber
         
         let wind = weather.object(forKey: ServerKeys.wind.rawValue) as AnyObject
-//        let deg = wind.object(forKey: ServerKeys.deg.rawValue) as! NSNumber
         let speed = wind.object(forKey: ServerKeys.speed.rawValue) as! NSNumber
         
         let clouds = weather.object(forKey: ServerKeys.clouds.rawValue) as AnyObject
